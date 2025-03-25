@@ -2,7 +2,7 @@ name: echofile
 on: [push]
 jobs:
   myfirstjob: 
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: helloprint
         run : echo "Hello World"
