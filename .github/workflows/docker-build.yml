@@ -1,0 +1,18 @@
+name: BuildImageandPush
+
+on:
+  push:
+    paths:
+      - Dockerfile
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and Push
+        run: |
+          echo "Building Image"
+          docker login -u "" --password
+          docker push nisanthkp90/githubaction:v.1
