@@ -12,9 +12,25 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Build and Push
-        run: |
-          echo "Building Image"
-          docker image build -t nisanthkp90/githubactionimage:v.1
-          echo "${{ secrets.DOCKERPW}}" | docker login -u "${{secrets.DOCKER_USERNAME}}" --password-stdin
-          docker push nisanthkp90/githubactionimage:v.1
+        name: repo checkout
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKERPW }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: nisanthkp90/githubactionimage:v.1
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
